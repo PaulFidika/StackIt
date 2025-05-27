@@ -1,36 +1,38 @@
 import * as THREE from 'three';
-import './css/stack-style.css'
-import * as Physijs from '../../lib/physi.js'
+import './css/stack-style.css';
+import * as Physijs from '../../lib/physi.js';
 
-var scene, camera, renderer;
-var light1, light2;  // two lights
-var clock;           // time
-var bricks;
-var stackHeight;
-var warm = document.getElementById("warm")
-var gameState = {
-	score: 0,
-	scene: "start",
-	combo: 0,
-	maxCombo: 0
+let scene; let camera; let
+  renderer;
+let light1; let
+  light2; // two lights
+let clock; // time
+let bricks;
+let stackHeight;
+const warm = document.getElementById('warm');
+const gameState = {
+  score: 0,
+  scene: 'start',
+  combo: 0,
+  maxCombo: 0,
 };
 
-var rainBowColors=[0xd358f7,0xfa5858,0xfaac58,0xfafa58,0x58fa58,0x58faf4,0x5882fa]
-var palette_summer = {
-	yellow: 0xfff489,
-	white: 0xd8d8d8,
-	pink: 0xffdcfc,
-	blue: 0xedc6ff,
-	purple: 0xc4ddff,
-	red: 0xffb8b8,
-}
+const rainBowColors = [0xd358f7, 0xfa5858, 0xfaac58, 0xfafa58, 0x58fa58, 0x58faf4, 0x5882fa];
+const palette_summer = {
+  yellow: 0xfff489,
+  white: 0xd8d8d8,
+  pink: 0xffdcfc,
+  blue: 0xedc6ff,
+  purple: 0xc4ddff,
+  red: 0xffb8b8,
+};
 
 createScene();
-animate();  // start the animation loop!
+animate(); // start the animation loop!
 
 
 // function createScene() {
-	
+
 // 	// define the following global variables
 // 	// scene, camera, renderer, light1, light2
 //     initScene();
@@ -40,7 +42,7 @@ animate();  // start the animation loop!
 // 	initControls();
 // 	bricks = new Array(200);
 // 	var foundation = new Foundation();
-	
+
 // 	scene.add(foundation.mesh);
 // 	stackHeight = 1;
 // 	bricks[0] = new Brick('z', 50, 50);
@@ -56,7 +58,7 @@ animate();  // start the animation loop!
 // 			if (!bricks[stackHeight].isDropped) {
 // 				if (camera.position.y - bricks[stackHeight].mesh.position.y <= 100) {
 // 					moveCamera(deltaTime);
-// 				}			
+// 				}
 // 				moveBrick(bricks[stackHeight], deltaTime);
 // 			} else {
 // 				dropBrick(bricks[stackHeight]);
@@ -64,7 +66,7 @@ animate();  // start the animation loop!
 // 					addBrick();
 // 				}
 // 			}
-			
+
 // 			scene.simulate();
 // 			renderer.render(scene, camera);
 // 			break;
@@ -74,7 +76,7 @@ animate();  // start the animation loop!
 // 			break;
 // 		default:
 // 	}
-	
+
 // 	requestAnimationFrame(animate);
 // }
 
@@ -151,33 +153,33 @@ animate();  // start the animation loop!
 // 	this.mesh.position.set(0,  -79, 0);
 // }
 
-function playGameMusic(soundfile){
-		// create an AudioListener and add it to the camera
-		var listener = new THREE.AudioListener();
-		camera.add( listener );
+function playGameMusic(soundfile) {
+  // create an AudioListener and add it to the camera
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
 
-		// create a global audio source
-		var sound = new THREE.Audio( listener );
+  // create a global audio source
+  const sound = new THREE.Audio(listener);
 
-		// load a sound and set it as the Audio object's buffer
-		var audioLoader = new THREE.AudioLoader();
-		audioLoader.load( '/sounds/'+soundfile, function( buffer ) {
-			sound.setBuffer( buffer );
-			sound.setLoop( false );
-			sound.setVolume( 0.05 );
-			sound.play();
-		});
+  // load a sound and set it as the Audio object's buffer
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load(`/sounds/${soundfile}`, (buffer) => {
+    sound.setBuffer(buffer);
+    sound.setLoop(false);
+    sound.setVolume(0.05);
+    sound.play();
+  });
 }
 
 function cheers() {
-	//console.log(bricks[stackHeight].mesh.material.__proto__.color);
-	//console.log(rainBowColors);
-	bricks[stackHeight].mesh.material.__proto__.color.setHex(rainBowColors[gameState.combo%7]);
-	var pm = gameState.combo % 8;
-	var file = pm + '.mp3';
-	//console.log('combo: '+gameState.combo);
-	playGameMusic(file);
-	gameState.score += gameState.combo;
+  // console.log(bricks[stackHeight].mesh.material.__proto__.color);
+  // console.log(rainBowColors);
+  bricks[stackHeight].mesh.material.__proto__.color.setHex(rainBowColors[gameState.combo % 7]);
+  const pm = gameState.combo % 8;
+  const file = `${pm}.mp3`;
+  // console.log('combo: '+gameState.combo);
+  playGameMusic(file);
+  gameState.score += gameState.combo;
 }
 
 // function Brick(direction, width, depth) {
@@ -185,7 +187,7 @@ function cheers() {
 // 	this.drop_speed = 60;
 // 	this.isDropped = false;
 // 	this.direction = direction;
-	
+
 // 	var geom = new THREE.BoxGeometry(50, 8, 50);
 // 	geom.scale(width / 50, 1, depth / 50)
 // 	var mat = new THREE.MeshLambertMaterial({
@@ -193,10 +195,10 @@ function cheers() {
 // 		//color: (Math.random()*16777215)
 // 	});
 // 	var pmaterial = new Physijs.createMaterial(mat, 0.9, 0.01);
-	
+
 // 	//this.mesh = new THREE.Mesh(geom, mat);
 // 	this.mesh = new Physijs.BoxMesh(geom, pmaterial, 0);
-	
+
 // 	this.mesh.castShadow = true;
 // 	this.mesh.receiveShadow = true;
 // }
@@ -235,7 +237,7 @@ function cheers() {
 // 		bricks[stackHeight].mesh.scale.z = bricks[stackHeight - 1].mesh.scale.z;
 // 		bricks[stackHeight].mesh.position.set(posX, 8 * (stackHeight) ,  -59);
 // 	}
-	
+
 // 	scene.add(bricks[stackHeight].mesh);
 // }
 
@@ -247,7 +249,7 @@ function cheers() {
 // 		} else if (brick.mesh.position.x <= -60) {
 // 			brick.fly_speed =  - brick.fly_speed;
 // 		}
-		
+
 // 		brick.mesh.position.x += deltaTime * brick.fly_speed;
 // 	} else {
 // 		if (brick.mesh.position.z >= 60) {
@@ -255,30 +257,30 @@ function cheers() {
 // 		} else if (brick.mesh.position.z <= -60) {
 // 			brick.fly_speed =  - brick.fly_speed;
 // 		}
-		
+
 // 		brick.mesh.position.z += deltaTime * brick.fly_speed;
 // 	}
 // }
 
 
 // function dropBrick(brick) {
-	
+
 // 	// enable flying brick to stop manually
 // 	brick.mesh.__dirtyPosition = true;
 // 	brick.mesh.__dirtyRotation = true;
-	
+
 // 	// parameters of the top brick on stack
 // 	var width = 50 * bricks[stackHeight - 1].mesh.scale.x;
 // 	var depth = 50 * bricks[stackHeight - 1].mesh.scale.z;
 // 	var posX = bricks[stackHeight - 1].mesh.position.x;
 // 	var posY = bricks[stackHeight - 1].mesh.position.y;
 // 	var posZ = bricks[stackHeight - 1].mesh.position.z;
-	
+
 // 	var droppedBrick;
-	
+
 // 	// console.log("width:" + width);
 // 	// console.log("depth:" + depth);
-	
+
 // 	if (brick.direction === 'x') {
 // 		var newWidth = width - Math.abs(brick.mesh.position.x - posX);
 // 		// console.log("newWidth:" + newWidth);
@@ -287,21 +289,21 @@ function cheers() {
 // 			scene.remove(brick.mesh);
 // 			scene.add(droppedBrick.mesh);
 // 			gameState.combo = 0;
-			
+
 // 			endGame();
 // 		} else {
 // 			var deltaX = Math.abs(width - newWidth);
-			
+
 // 			if (brick.mesh.position.x - posX <= -1) {
 // 				brick.mesh.scale.x = newWidth / 50;
 // 				brick.mesh.position.x = posX - deltaX / 2;
-// 				droppedBrick = new DroppedBrick(depth, width - newWidth, posX - deltaX - newWidth / 2, posY + 8, posZ)			
+// 				droppedBrick = new DroppedBrick(depth, width - newWidth, posX - deltaX - newWidth / 2, posY + 8, posZ)
 // 				droppedBrick.mesh.setAngularVelocity(new THREE.Vector3(0, 0, 20));
 // 				gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
 // 				gameState.combo=0;
 // 				scene.add(droppedBrick.mesh);
 // 				playGameMusic('drop.mp3');
-				
+
 // 			} else if (brick.mesh.position.x - posX >= 1){
 // 				brick.mesh.scale.x = newWidth / 50;
 // 				brick.mesh.position.x = posX + deltaX / 2;
@@ -318,7 +320,7 @@ function cheers() {
 // 				cheers();
 // 			}
 // 		}
-			
+
 // 	} else {
 // 		var newDepth = depth - Math.abs(brick.mesh.position.z - posZ);
 // 		// console.log("newDepth:" + newDepth);
@@ -327,11 +329,11 @@ function cheers() {
 // 			scene.remove(brick.mesh);
 // 			scene.add(droppedBrick.mesh);
 // 			gameState.combo = 0;
-			
+
 // 			endGame();
 // 		} else {
 // 			var deltaZ = Math.abs(depth - newDepth);
-			
+
 // 			if (brick.mesh.position.z - posZ <= -1) {
 // 				brick.mesh.scale.z = newDepth / 50;
 // 				brick.mesh.position.z = posZ - deltaZ / 2;
@@ -366,80 +368,78 @@ function cheers() {
 
 // 				cheers();
 // 			}
-// 		}	
+// 		}
 // 	}
-	
+
 // 	//brick.fly_speed = 0;
 // 	stackHeight += 1;
 // 	gameState.score += 1;
 // }
 
 function endGame() {
-	gameState.scene = 'end';
-	var message = document.getElementById("lose-message");
-	var canvas = document.getElementById("canvas-area");
-	var score_display = document.getElementById("score");
-	var maxCombo_display = document.getElementById("maxCombo");
-	score_display.innerHTML=gameState.score;
-	maxCombo_display.innerHTML=gameState.maxCombo;
-	canvas.style.filter = "blur(3px) grayscale(30%)";
-	//canvas.style.transition;
-	message.style.display = "block";
-	playGameMusic('gameover.mp3');
+  gameState.scene = 'end';
+  const message = document.getElementById('lose-message');
+  const canvas = document.getElementById('canvas-area');
+  const score_display = document.getElementById('score');
+  const maxCombo_display = document.getElementById('maxCombo');
+  score_display.innerHTML = gameState.score;
+  maxCombo_display.innerHTML = gameState.maxCombo;
+  canvas.style.filter = 'blur(3px) grayscale(30%)';
+  // canvas.style.transition;
+  message.style.display = 'block';
+  playGameMusic('gameover.mp3');
 }
 
 
 function keydown(event) {
-	// console.log("Keydown:" + event.key);
-	// console.dir(event);
-	if (gameState.scene === 'end' && (event.key === 'r' || event.key === 'R')) {
-		var message = document.getElementById("lose-message");
-		var canvas = document.getElementById("canvas-area");
-		canvas.style.filter = "";
-		message.style.display = "none";
-		// clear three js scene
-		while (scene.children.length > 0) {
-			scene.remove(scene.children[0]);
-		}
-		createScene();
-		gameState.scene = 'start';
-		gameState.score = 0;
-		gameState.combo = 0;
-		gameState.maxCombo = 0;
-		playGameMusic('restart.mp3');
-		return;
-	}
-	
-	if (gameState.scene === 'start' && event.key === ' ') {
-		bricks[stackHeight].isDropped = true;
-		return;
-	}
+  // console.log("Keydown:" + event.key);
+  // console.dir(event);
+  if (gameState.scene === 'end' && (event.key === 'r' || event.key === 'R')) {
+    const message = document.getElementById('lose-message');
+    const canvas = document.getElementById('canvas-area');
+    canvas.style.filter = '';
+    message.style.display = 'none';
+    // clear three js scene
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+    }
+    createScene();
+    gameState.scene = 'start';
+    gameState.score = 0;
+    gameState.combo = 0;
+    gameState.maxCombo = 0;
+    playGameMusic('restart.mp3');
+    return;
+  }
+
+  if (gameState.scene === 'start' && event.key === ' ') {
+    bricks[stackHeight].isDropped = true;
+  }
 }
 
 
 function handleButtonEvent(id) {
-	
-	var button = document.getElementById(id);
-	if (id === 'button-restart') {
-		button.addEventListener('click', () => {
-			var message = document.getElementById("lose-message");
-			var canvas = document.getElementById("canvas-area");
-			canvas.style.filter = "";
-			message.style.display = "none";
-			// clear three js scene
-			while (scene.children.length > 0) {
-				scene.remove(scene.children[0]);
-			}
-			playGameMusic('restart.mp3');
-			createScene();
-			gameState.scene = 'start';
-			gameState.score = 0;
-			gameState.combo = 0;
-			gameState.maxCombo = 0;
-		})
-	} else if(id === 'button-menu') {
-		button.addEventListener('click', () => {
-			window.location.href = 'index.html';
-		})	
-	}
+  const button = document.getElementById(id);
+  if (id === 'button-restart') {
+    button.addEventListener('click', () => {
+      const message = document.getElementById('lose-message');
+      const canvas = document.getElementById('canvas-area');
+      canvas.style.filter = '';
+      message.style.display = 'none';
+      // clear three js scene
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+      }
+      playGameMusic('restart.mp3');
+      createScene();
+      gameState.scene = 'start';
+      gameState.score = 0;
+      gameState.combo = 0;
+      gameState.maxCombo = 0;
+    });
+  } else if (id === 'button-menu') {
+    button.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  }
 }

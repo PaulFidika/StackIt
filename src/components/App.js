@@ -25,17 +25,31 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // initialize firebase
-    firebase.initializeApp(this.props.firebaseConfig);
-    const settings = {
-      timestampsInSnapshots: true,
-    };
-    const firestore = firebase.firestore();
-    firestore.settings(settings);
+    // initialize firebase only if we have valid configuration
+    const { firebaseConfig } = this.props;
+    
+    // Check if we have a valid Firebase configuration
+    const hasValidFirebaseConfig = firebaseConfig?.projectId
+      && firebaseConfig.projectId !== 'your-project-id'
+      && firebaseConfig?.apiKey
+      && firebaseConfig.apiKey !== 'your-api-key-here';
 
-    // if user already logged in, fetch user info
-    this.props.userSignInBatch(this.props.userAuth);
-    // this.props.userFetchData();
+    if (hasValidFirebaseConfig) {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        // Remove deprecated timestampsInSnapshots setting
+        // No need to call settings() anymore - timestamps in snapshots is now default
+        
+        // if user already logged in, fetch user info
+        this.props.userSignInBatch(this.props.userAuth);
+      } catch (error) {
+        console.warn('Firebase initialization failed:', error);
+        console.log('Running in offline mode without Firebase features');
+      }
+    } else {
+      console.log('Firebase not configured - running in offline mode');
+      console.log('To enable authentication, set up your Firebase configuration');
+    }
   }
 
   navigateToSection(section) {
@@ -107,7 +121,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  firebaseConfig: PropTypes.object.isRequired,
+  firebaseConfig: PropTypes.object,
   userAuth: PropTypes.func,
   userSignInBatch: PropTypes.func,
   appSwitchSection: PropTypes.func,
