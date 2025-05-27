@@ -33,7 +33,10 @@ class EndMenu extends Component {
       <div className='end-menu'>
         <ShowcaseLayout showcase={
           (section === 'score')
-            ? (<ScoreBoard score={this.state.score} combo={this.state.combo} />)
+            ? (<ScoreBoard
+                score={this.state.score.toString()}
+                combo={this.state.combo.toString()}
+              />)
             : (<LeaderBoard data={this.state.leaderboardData} />)
         }>
           <Button name="👈" onClick={this.props.onBackButtonClick}/>

@@ -5,6 +5,11 @@
     "browser": true,
     "node": true
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "no-console": "off",
     "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
