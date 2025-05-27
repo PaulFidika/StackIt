@@ -11,7 +11,7 @@ import NavBar from './NavBar';
 import InfoBoard from './InfoBoard';
 import EndMenu from './EndMenu';
 import ThreeContainer from './ThreeContainer';
-import MenuScene from './three/MenuScene';
+import MenuScene from './three/menuScene';
 import GameScene from './three/GameScene';
 import '../css/animation.css';
 import '../css/app.css';

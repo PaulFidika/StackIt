@@ -4,7 +4,7 @@
   "description": "A WebGL game built on THREE.js",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --hot --https",
+    "start": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
     "test": "jest"
   },
@@ -38,15 +38,15 @@
     "worker-loader": "^2.0.0"
   },
   "dependencies": {
-    "redux-devtools-extension": "^2.13.7",
     "cross-fetch": "^3.0.0",
     "firebase": "^5.7.2",
     "physijs-webpack": "github:agilgur5/physijs-webpack",
     "prop-types": "^15.6.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-redux": "^6.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.3",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.7",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "three": "^0.99.0"

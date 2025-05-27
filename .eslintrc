@@ -10,7 +10,8 @@
     "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
     "prefer-destructuring": ["error", {"object": false}],
     "new-cap": ["error", {"newIsCapExceptionPattern": "^Physijs.\\w"}],
-    "no-underscore-dangle": ["error", {"allow": ["__dirtyPosition", "__dirtyRotation"]}]
+    "no-underscore-dangle": ["error", {"allow": ["__dirtyPosition", "__dirtyRotation"]}],
+    "linebreak-style": ["error", "windows"]
   },
   "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb-base"]
 }
