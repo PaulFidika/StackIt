@@ -34,3 +34,31 @@ This is the cornerstone for the game itself, and it's a powerful tool for desgin
 
 Firebase offers clean and simple APIs to persist data, and deploy web apps. And it also offers other useful features like user login and authentication.
 
+---
+
+## To Do List
+
+### UI
+
+- [ ] Hide the leaderboard since it's not actually being used
+- [ ] HIde the login button and options, unless Firebase is actually being used for an actual login system. If proper firebase envs are not supplied, or the supplied values fail to work, assume that it firebase (and hence login) should be disabled.
+
+### Scoring System
+
+- [ ] Currently in EndMenu.js the score is fixed, and the leaderboard is faked. Instead, implement a real scoring system. There is no Notion of 'max combo' that we will measure. Instead we will score 1 point per block stacked. We will keep a running total internally.
+- [ ] While blocks are being stacked, display a 'current score' in the upper-center part of the screen.
+- [ ] After every game, store the player's highest score in local storage
+- [ ] After the game finishes, display the score the player got versus their highest score.
+
+### Gameplay
+
+- [ ] Begin keeping track of a 'perfect stack' internally; we will call this the combo meter. A perfect stack is when blocks are placed with no loss on top of each other.
+- [ ] When the player has 3 or more perfect stacks in a row (combo of 3) expand the size of the block that was just placed. The next block to be placed will match its new, larger size. The core mechanic of the game is that as players miss, pieces of the block are shaved off, until there are no pieces left, but this mechanic allows pieces to be expanded upon. The size of the block cannot be expanded to be larger than the starting size of the block (with 0 stacks).
+
+### Cosmetic 
+
+- [ ] Whenever a player gets a perfect stack (combo), display a small square ripple emminating from the middle of the block outward
+- [ ] When the player gets to a perfect-stack (combo) of 3 or more, every block placed should send out small subtle fireworks
+- [ ] Start off with a random color for the base-block, and then for every block placed pick a new adjacent color along the color wheel. Move the color wheel in one direction the entire time. Use low-saturation, matte, pastel colors, so that they are not distracting.
+- [ ] For the background, start off with a gradient pattern that should contrast the block's color. It should start off with one color near the bottom and then go up to another color higher in the sky. Also add in small subtle stars into the background.
+
