@@ -100,6 +100,13 @@ class GameScene {
           }
           if (res.case === 'overlap') {
             this.state.combo += 1;
+            // if player made three or more perfect stacks in a row, enlarge the
+            // current brick up to its original size
+            if (this.state.combo >= 3) {
+              const mesh = this.bricks[height - 1].mesh;
+              mesh.scale.x = Math.min(1, mesh.scale.x + 0.1);
+              mesh.scale.z = Math.min(1, mesh.scale.z + 0.1);
+            }
           }
           this.state.score += 1;
           // create new brick
@@ -110,6 +117,7 @@ class GameScene {
               : new THREE.Vector3(-59, currPos.y + 8, currPos.z),
             scale: this.bricks[height - 1].mesh.scale,
             direction: this.bricks[height - 1].params.direction === 'x' ? 'z' : 'x',
+            speed: { h: 50 + height * 2, v: 60 },
           });
           this.bricks.push(newBrick);
           this.scene.add(this.bricks[height].mesh);
