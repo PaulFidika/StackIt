@@ -20,10 +20,10 @@ class EndMenu extends Component {
     return (
       <div className='end-menu'>
         <ShowcaseLayout showcase={
-          <ScoreBoard
-            score={this.state.score.toString()}
-            combo={this.state.combo.toString()}
-          />
+          (<ScoreBoard
+            score={this.props.score.toString()}
+            highscore={this.props.highScore.toString()}
+          />)
         }>
           <Button name="👈" onClick={this.props.onBackButtonClick}/>
         </ShowcaseLayout>
@@ -34,7 +34,7 @@ class EndMenu extends Component {
 
 EndMenu.propTypes = {
   score: PropTypes.string,
-  combo: PropTypes.string,
+  highScore: PropTypes.string,
   onBackButtonClick: PropTypes.func,
 };
 

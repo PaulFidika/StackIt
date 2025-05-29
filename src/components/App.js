@@ -11,6 +11,7 @@ import NavBar from './NavBar';
 import InfoBoard from './InfoBoard';
 import EndMenu from './EndMenu';
 import ThreeContainer from './ThreeContainer';
+import ScoreDisplay from './ScoreDisplay';
 import MenuScene from './three/menuScene';
 import GameScene from './three/GameScene';
 import '../css/animation.css';
@@ -21,8 +22,13 @@ class App extends Component {
     super(props);
     this.state = {
       threeSceneManager: new MenuScene(),
+      currentScore: 0,
+      lastScore: 0,
+      highScore: parseInt(localStorage.getItem('highScore'), 10) || 0,
       firebaseEnabled: false,
     };
+    this.handleSceneEnd = this.handleSceneEnd.bind(this);
+    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -61,12 +67,29 @@ class App extends Component {
     if (section === 'start') {
       this.setState({
         threeSceneManager: new MenuScene(),
+        currentScore: 0,
       });
     } else if (section === 'game') {
       this.setState({
         threeSceneManager: new GameScene(),
+        currentScore: 0,
       });
     }
+  }
+
+  handleScoreUpdate(score) {
+    this.setState({ currentScore: score });
+  }
+
+  handleSceneEnd(sceneState) {
+    const finalScore = sceneState.score;
+    let { highScore } = this.state;
+    if (finalScore > highScore) {
+      highScore = finalScore;
+      localStorage.setItem('highScore', highScore);
+    }
+    this.setState({ lastScore: finalScore, highScore, currentScore: finalScore });
+    this.navigateToSection('end');
   }
 
   resolveAppSectionView() {
@@ -78,7 +101,13 @@ class App extends Component {
                   firebaseEnabled={this.state.firebaseEnabled}
                 />);
       case 'end':
-        return (<EndMenu onBackButtonClick={() => this.navigateToSection('start')} />);
+        return (
+          <EndMenu
+            score={this.state.lastScore.toString()}
+            highScore={this.state.highScore.toString()}
+            onBackButtonClick={() => this.navigateToSection('start')}
+          />
+        );
       case 'form':
         return (<AliasForm onFinish={() => this.navigateToSection('start')}/>);
       case 'game':
@@ -97,7 +126,11 @@ class App extends Component {
         <div className="three-container-style-wrapper"
               style={section === 'game' ? null : { filter: 'blur(5px) brightness(90%)' }}>
           <ThreeContainer manager={this.state.threeSceneManager}
-                          onSceneEnd={() => this.navigateToSection('end')}/>
+                          onSceneEnd={this.handleSceneEnd}
+                          onScoreUpdate={this.handleScoreUpdate}/>
+          {section === 'game' && (
+            <ScoreDisplay score={this.state.currentScore} />
+          )}
         </div>
         {section !== 'game' && (
           <>

@@ -9,6 +9,7 @@ class ThreeContainer extends Component {
     this.isSceneEndHandled = false;
     this.animate = this.animate.bind(this);
     this.handleMouseClick = this.handleMouseClick.bind(this);
+    this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
@@ -73,12 +74,14 @@ class ThreeContainer extends Component {
     if (this.isSceneEndHandled) {
       this.frameId = requestAnimationFrame(this.animate);
       this.manager.update();
+      this.handleScoreUpdate();
     } else {
       this.frameId = requestAnimationFrame(this.animate);
       this.manager.update();
+      this.handleScoreUpdate();
       if (this.manager.state.isTerminated) {
         console.log(this.manager.state);
-        this.props.onSceneEnd();
+        this.props.onSceneEnd(this.manager.state);
         this.isSceneEndHandled = true;
       }
     }
@@ -86,6 +89,12 @@ class ThreeContainer extends Component {
 
   handleMouseClick() {
     this.manager.handleMouseClick();
+  }
+
+  handleScoreUpdate() {
+    if (this.props.onScoreUpdate) {
+      this.props.onScoreUpdate(this.manager.state.score);
+    }
   }
 
   handleKeyPress(event) {
@@ -108,12 +117,14 @@ class ThreeContainer extends Component {
 ThreeContainer.propTypes = {
   manager: PropTypes.object,
   onSceneEnd: PropTypes.func,
+  onScoreUpdate: PropTypes.func,
   handleWindowResize: PropTypes.func,
 };
 
 ThreeContainer.defaultProps = {
   manager: null,
   onSceneEnd: null,
+  onScoreUpdate: null,
 };
 
 export default ThreeContainer;
