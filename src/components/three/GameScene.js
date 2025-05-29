@@ -2,8 +2,10 @@ import * as THREE from 'three';
 // import Physijs from 'physijs-webpack/webpack';
 import Brick from './entity/Brick';
 import Cornerstone from './entity/Cornerstone';
+import Ripple from './entity/Ripple';
+import Firework from './entity/Firework';
 import { PhysicSceneModule, RendererModule, CameraModule } from './module/SceneModules';
-import palette from './Palette';
+import palette, { getWheelColor } from './Palette';
 
 class GameScene {
   constructor() {
@@ -17,6 +19,9 @@ class GameScene {
       maxCombo: 0,
       score: 0,
     };
+    this.colorIndex = Math.floor(Math.random() * 8);
+    this.ripples = [];
+    this.fireworks = [];
     this.name = this.scene.uuid;
     // utilities
     this.handleWindowResize = this.handleWindowResize.bind(this);
@@ -53,11 +58,15 @@ class GameScene {
     const baseBrick = new Brick({
       position: new THREE.Vector3(0, -4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: getWheelColor(this.colorIndex),
     });
+    this.colorIndex += 1;
     const currBrick = new Brick({
       position: new THREE.Vector3(0, 4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: getWheelColor(this.colorIndex),
     });
+    this.colorIndex += 1;
     this.bricks.push(baseBrick);
     this.bricks.push(currBrick);
     // scene set up
@@ -100,6 +109,7 @@ class GameScene {
           }
           if (res.case === 'overlap') {
             this.state.combo += 1;
+            this.spawnRipple(this.bricks[height - 1].mesh.position);
             // if player made three or more perfect stacks in a row, enlarge the
             // current brick up to its original size
             if (this.state.combo >= 3) {
@@ -117,8 +127,13 @@ class GameScene {
               : new THREE.Vector3(-59, currPos.y + 8, currPos.z),
             scale: this.bricks[height - 1].mesh.scale,
             direction: this.bricks[height - 1].params.direction === 'x' ? 'z' : 'x',
+            color: getWheelColor(this.colorIndex),
             speed: { h: 50 + height * 2, v: 60 },
           });
+          if (this.state.combo >= 3) {
+            this.spawnFirework(this.bricks[height - 1].mesh.position);
+          }
+          this.colorIndex += 1;
           this.bricks.push(newBrick);
           this.scene.add(this.bricks[height].mesh);
           this.state.toDrop = false;
@@ -127,7 +142,7 @@ class GameScene {
     }
     // remove some falling bricks to boost performace
     this.fallingBricks.forEach((brick, index) => {
-      if (brick && brick.mesh.position.y < this.camera.position.y - 150) {
+      if (brick && brick.mesh.position.y < this.camera.position.y - 300) {
         this.scene.remove(brick.mesh);
         brick.mesh.geometry.dispose();
         this.fallingBricks.splice(index, 1);
@@ -135,9 +150,39 @@ class GameScene {
         brick.update(deltaTime);
       }
     });
+
+    this.ripples.forEach((ripple, idx) => {
+      ripple.update(deltaTime);
+      if (ripple.isDone()) {
+        this.scene.remove(ripple.mesh);
+        this.ripples.splice(idx, 1);
+      }
+    });
+
+    this.fireworks.forEach((fw, idx) => {
+      fw.update(deltaTime);
+      if (fw.isDone()) {
+        this.scene.remove(fw.points);
+        this.fireworks.splice(idx, 1);
+      }
+    });
     // render scene
     this.scene.simulate();
     this.renderer.render(this.scene, this.camera);
+  }
+
+  spawnRipple(position) {
+    const color = getWheelColor(this.colorIndex);
+    const ripple = new Ripple(position, color);
+    this.ripples.push(ripple);
+    this.scene.add(ripple.mesh);
+  }
+
+  spawnFirework(position) {
+    const color = getWheelColor(this.colorIndex);
+    const fw = new Firework(position, color);
+    this.fireworks.push(fw);
+    this.scene.add(fw.points);
   }
 
   handleWindowResize() {

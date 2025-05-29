@@ -10,4 +10,20 @@ const palette = {
   black: 0x000000,
 };
 
+const pastelWheel = [
+  0xffadad,
+  0xffd6a5,
+  0xfdffb6,
+  0xcaffbf,
+  0x9bf6ff,
+  0xa0c4ff,
+  0xbdb2ff,
+  0xffc6ff,
+];
+
+function getWheelColor(index) {
+  return pastelWheel[index % pastelWheel.length];
+}
+
+export { pastelWheel, getWheelColor };
 export default palette;
