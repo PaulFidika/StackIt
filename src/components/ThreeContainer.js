@@ -10,6 +10,7 @@ class ThreeContainer extends Component {
     this.animate = this.animate.bind(this);
     this.handleMouseClick = this.handleMouseClick.bind(this);
     this.handleScoreUpdate = this.handleScoreUpdate.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -17,6 +18,7 @@ class ThreeContainer extends Component {
       const mountPoint = this.mountPoint;
       mountPoint.appendChild(this.manager.renderer.domElement);
       window.addEventListener('resize', this.manager.handleWindowResize, false);
+      window.addEventListener('keydown', this.handleKeyPress, false);
       this.animate();
     }
   }
@@ -37,6 +39,7 @@ class ThreeContainer extends Component {
       cancelAnimationFrame(this.frameId);
       mountPoint.removeChild(currRenderer.domElement);
       window.removeEventListener('resize', currManager.handleWindowResize);
+      window.removeEventListener('keydown', this.handleKeyPress);
       return true;
     }
 
@@ -52,6 +55,7 @@ class ThreeContainer extends Component {
       this.manager = manager;
       mountPoint.appendChild(renderer.domElement);
       window.addEventListener('resize', this.manager.handleWindowResize, false);
+      window.addEventListener('keydown', this.handleKeyPress, false);
       this.animate();
     }
   }
@@ -63,6 +67,7 @@ class ThreeContainer extends Component {
     if (this.manager !== null) {
       this.mountPoint.removeChild(this.manager.renderer.domElement);
     }
+    window.removeEventListener('keydown', this.handleKeyPress);
   }
 
   animate() {
@@ -89,6 +94,13 @@ class ThreeContainer extends Component {
   handleScoreUpdate() {
     if (this.props.onScoreUpdate) {
       this.props.onScoreUpdate(this.manager.state.score);
+    }
+  }
+
+  handleKeyPress(event) {
+    if (event.code === 'Space' || event.key === ' ') {
+      event.preventDefault();
+      this.manager.handleMouseClick();
     }
   }
 

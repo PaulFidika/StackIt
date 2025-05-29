@@ -7,6 +7,14 @@ import ShowcaseLayout from './layout/ShowcaseLayout';
 
 
 class EndMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // leaderboard removed
+      score: 76,
+      combo: 7,
+    };
+  }
 
   render() {
     return (
