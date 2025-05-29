@@ -21,6 +21,7 @@ class App extends Component {
     super(props);
     this.state = {
       threeSceneManager: new MenuScene(),
+      firebaseEnabled: false,
     };
   }
 
@@ -42,13 +43,16 @@ class App extends Component {
 
         // if user already logged in, fetch user info
         this.props.userSignInBatch(this.props.userAuth);
+        this.setState({ firebaseEnabled: true });
       } catch (error) {
         console.warn('Firebase initialization failed:', error);
         console.log('Running in offline mode without Firebase features');
+        this.setState({ firebaseEnabled: false });
       }
     } else {
       console.log('Firebase not configured - running in offline mode');
       console.log('To enable authentication, set up your Firebase configuration');
+      this.setState({ firebaseEnabled: false });
     }
   }
 
@@ -69,7 +73,10 @@ class App extends Component {
     const section = this.props.currentSection;
     switch (section) {
       case 'start':
-        return (<StartMenu onGameStart={() => this.navigateToSection('game')}/>);
+        return (<StartMenu
+                  onGameStart={() => this.navigateToSection('game')}
+                  firebaseEnabled={this.state.firebaseEnabled}
+                />);
       case 'end':
         return (<EndMenu onBackButtonClick={() => this.navigateToSection('start')} />);
       case 'form':
