@@ -28,7 +28,7 @@ class FallingBrick {
   }
 
   update(deltaTime) {
-    Object.getPrototypeOf(this.mesh.material).opacity -= 0.15 * deltaTime;
+    Object.getPrototypeOf(this.mesh.material).opacity -= 0.05 * deltaTime;
   }
 }
 
