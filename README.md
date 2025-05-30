@@ -58,10 +58,10 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 
 ### Cosmetic 
 
-- [ ] Whenever a player gets a perfect stack (combo), display a small square ripple emminating from the middle of the block outward
-- [ ] When the player gets to a perfect-stack (combo) of 3 or more, every block placed should send out small subtle fireworks
-- [ ] Start off with a random color for the base-block, and then for every block placed pick a new adjacent color along the color wheel. Move the color wheel in one direction the entire time. Use low-saturation, matte, pastel colors, so that they are not distracting.
+- [x] Whenever a player gets a perfect stack (combo), display a small square ripple emminating from the middle of the block outward
+- [x] When the player gets to a perfect-stack (combo) of 3 or more, every block placed should send out small subtle fireworks
+- [x] Start off with a random color for the base-block, and then for every block placed pick a new adjacent color along the color wheel. Move the color wheel in one direction the entire time. Use low-saturation, matte, pastel colors, so that they are not distracting.
 - [ ] For the background, start off with a gradient pattern that should contrast the block's color. It should start off with one color near the bottom and then go up to another color higher in the sky. Also add in small subtle stars into the background.
-- [ ] After a piece of a block is 'shaved off', allow it to fall and tumble much longer before being disappearing
+- [x] After a piece of a block is 'shaved off', allow it to fall and tumble much longer before being disappearing
 - [ ] Run the game entirely in-browser; do not depend upon there being any sort of server to do the physics and falling calculations for a block falling. Currently if you do not have a server running, the game will still play in browser, but for some reason the blocks will not fall.
 
