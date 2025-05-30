@@ -40,8 +40,8 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 
 ### UI
 
-- [ ] Hide the leaderboard since it's not actually being used
-- [ ] HIde the login button and options, unless Firebase is actually being used for an actual login system. If proper firebase envs are not supplied, or the supplied values fail to work, assume that it firebase (and hence login) should be disabled.
+- [x] Hide the leaderboard since it's not actually being used
+- [x] HIde the login button and options, unless Firebase is actually being used for an actual login system. If proper firebase envs are not supplied, or the supplied values fail to work, assume that it firebase (and hence login) should be disabled.
 
 ### Scoring System
 

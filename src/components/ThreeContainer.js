@@ -72,8 +72,7 @@ class ThreeContainer extends Component {
       this.frameId = requestAnimationFrame(this.animate);
       this.manager.update();
       if (this.manager.state.isTerminated) {
-        console.log(this.manager.state);
-        this.props.onSceneEnd();
+        this.props.onSceneEnd(this.manager.state);
         this.isSceneEndHandled = true;
       }
     }
