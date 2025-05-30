@@ -33,10 +33,12 @@ class StartMenu extends Component {
             <ListLayout>
               <Button name="start" onClick={this.props.onGameStart}/>
               <Button name="tutorial" onClick={() => this.navigateToSection('tutorial')}/>
-              {this.props.userRegistered ? (
-                <FirebaseLogout />
-              ) : (
-                <Button name="login" onClick={() => this.navigateToSection('login')}/>
+              {this.props.firebaseEnabled && (
+                this.props.userRegistered ? (
+                  <FirebaseLogout />
+                ) : (
+                  <Button name="login" onClick={() => this.navigateToSection('login')}/>
+                )
               )}
             </ListLayout>
           </div>);
@@ -75,6 +77,7 @@ class StartMenu extends Component {
 StartMenu.propTypes = {
   userRegistered: PropTypes.bool,
   onGameStart: PropTypes.func,
+  firebaseEnabled: PropTypes.bool,
 };
 
 

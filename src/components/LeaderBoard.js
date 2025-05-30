@@ -25,14 +25,14 @@ function LeaderBoardItem(props) {
   );
 }
 
-function ScoreBoard(props) {
+function ScoreBoard({ score, highScore }) {
   return (
     <div className="scoreboard">
       <ul className="scoreboard-list">
-        <li key="score-title"> score </li>
-        <li key="score" id="score"> {props.score} </li>
-        <li key="combo-title"> max combo </li>
-        <li key="combo" id="combo">  {props.combo} </li>
+        <li key="score-title"> your score </li>
+        <li key="score" id="score"> {score} </li>
+        <li key="highscore-title"> highest score </li>
+        <li key="highscore" id="highscore"> {highScore} </li>
       </ul>
     </div>
   );
@@ -50,7 +50,7 @@ LeaderBoardItem.propTypes = {
 
 ScoreBoard.propTypes = {
   score: PropTypes.string,
-  combo: PropTypes.string,
+  highScore: PropTypes.string,
 };
 
 export { LeaderBoard, ScoreBoard };

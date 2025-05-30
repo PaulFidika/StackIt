@@ -1,9 +1,19 @@
+/* eslint-disable max-len */
 import * as THREE from 'three';
 // import Physijs from 'physijs-webpack/webpack';
 import Brick from './entity/Brick';
 import Cornerstone from './entity/Cornerstone';
+import Ripple from './entity/Ripple';
+import Firework from './entity/Firework';
 import { PhysicSceneModule, RendererModule, CameraModule } from './module/SceneModules';
 import palette from './Palette';
+
+// Add helper to get pastel color
+function pastelColor(hueDeg) {
+  const color = new THREE.Color();
+  color.setHSL(hueDeg / 360, 0.6, 0.7);
+  return color.getHex();
+}
 
 class GameScene {
   constructor() {
@@ -45,18 +55,25 @@ class GameScene {
     const light2 = new THREE.HemisphereLight(palette.white, palette.darkBlue, 0.95);
     // init scene entities
     this.bricks = [];
+    this.ripples = [];
+    this.fireworks = [];
     this.fallingBricks = [];
     const cornerstone = new Cornerstone({
       position: new THREE.Vector3(0, -100, 0),
       edge: new THREE.Vector3(50, 200, 50),
     });
+    // Initialize color wheel
+    this.hue = Math.random() * 360;
     const baseBrick = new Brick({
       position: new THREE.Vector3(0, -4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: pastelColor(this.hue),
     });
+    this.hue = (this.hue + 20) % 360;
     const currBrick = new Brick({
       position: new THREE.Vector3(0, 4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: pastelColor(this.hue),
     });
     this.bricks.push(baseBrick);
     this.bricks.push(currBrick);
@@ -100,16 +117,51 @@ class GameScene {
           }
           if (res.case === 'overlap') {
             this.state.combo += 1;
+            // Expand the perfectly stacked brick if combo >= 3, but cap at the original size (scale 1)
+            if (this.state.combo >= 3) {
+              const placedBrick = this.bricks[height - 1];
+              const newScaleX = Math.min(
+                1,
+                placedBrick.mesh.scale.x + 0.1,
+              );
+              const newScaleZ = Math.min(
+                1,
+                placedBrick.mesh.scale.z + 0.1,
+              );
+              placedBrick.mesh.scale.set(
+                newScaleX,
+                placedBrick.mesh.scale.y,
+                newScaleZ,
+              );
+              // Ensure Physijs updates the scale
+              // eslint-disable-next-line no-underscore-dangle
+              placedBrick.mesh.__dirtyScale = true;
+              // spawn fireworks
+              const fw = new Firework(placedBrick.mesh.position.clone(), placedBrick.mesh.material.color.getHex());
+              this.fireworks.push(fw);
+              this.scene.add(fw.group);
+              // spawn ripple on every perfect stack
+              const rp = new Ripple(placedBrick.mesh.position.clone(), placedBrick.mesh.material.color.getHex());
+              this.ripples.push(rp);
+              this.scene.add(rp.mesh);
+            }
           }
           this.state.score += 1;
           // create new brick
           const currPos = this.bricks[height - 1].mesh.position;
+          const nextDirection = this.bricks[height - 1].params.direction === 'x'
+            ? 'z'
+            : 'x';
+          const nextPos = (nextDirection === 'x')
+            ? new THREE.Vector3(currPos.x, currPos.y + 8, -59)
+            : new THREE.Vector3(-59, currPos.y + 8, currPos.z);
+          // Advance hue
+          this.hue = (this.hue + 20) % 360;
           const newBrick = new Brick({
-            position: this.bricks[height - 1].params.direction === 'x'
-              ? new THREE.Vector3(currPos.x, currPos.y + 8, -59)
-              : new THREE.Vector3(-59, currPos.y + 8, currPos.z),
+            position: nextPos,
             scale: this.bricks[height - 1].mesh.scale,
-            direction: this.bricks[height - 1].params.direction === 'x' ? 'z' : 'x',
+            direction: nextDirection,
+            color: pastelColor(this.hue),
           });
           this.bricks.push(newBrick);
           this.scene.add(this.bricks[height].mesh);
@@ -125,6 +177,21 @@ class GameScene {
         this.fallingBricks.splice(index, 1);
       } else {
         brick.update(deltaTime);
+      }
+    });
+    // update ripple and fireworks
+    this.ripples.forEach((r, i) => {
+      r.update(deltaTime);
+      if (r.isComplete) {
+        this.scene.remove(r.mesh);
+        this.ripples.splice(i, 1);
+      }
+    });
+    this.fireworks.forEach((f, i) => {
+      f.update(deltaTime);
+      if (f.isComplete) {
+        this.scene.remove(f.group);
+        this.fireworks.splice(i, 1);
       }
     });
     // render scene

@@ -19,8 +19,18 @@ import '../css/app.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    const { firebaseConfig } = props;
+    // Determine if we have a usable Firebase configuration
+    const firebaseEnabled = firebaseConfig?.projectId
+      && firebaseConfig.projectId !== 'not-configured'
+      && firebaseConfig.projectId !== 'your-project-id'
+      && firebaseConfig?.apiKey
+      && firebaseConfig.apiKey !== 'not-configured';
+
     this.state = {
       threeSceneManager: new MenuScene(),
+      firebaseEnabled,
+      endGameStats: null,
     };
   }
 
@@ -52,16 +62,19 @@ class App extends Component {
     }
   }
 
-  navigateToSection(section) {
+  navigateToSection(section, stats = null) {
     this.props.appSwitchSection(section);
     if (section === 'start') {
       this.setState({
         threeSceneManager: new MenuScene(),
+        endGameStats: null,
       });
     } else if (section === 'game') {
       this.setState({
         threeSceneManager: new GameScene(),
       });
+    } else if (section === 'end') {
+      this.setState({ endGameStats: stats });
     }
   }
 
@@ -69,9 +82,17 @@ class App extends Component {
     const section = this.props.currentSection;
     switch (section) {
       case 'start':
-        return (<StartMenu onGameStart={() => this.navigateToSection('game')}/>);
+        return (<StartMenu
+                  firebaseEnabled={this.state.firebaseEnabled}
+                  onGameStart={() => this.navigateToSection('game')}
+                />);
       case 'end':
-        return (<EndMenu onBackButtonClick={() => this.navigateToSection('start')} />);
+        return (
+          <EndMenu
+            score={this.state.endGameStats ? this.state.endGameStats.score : 0}
+            onBackButtonClick={() => this.navigateToSection('start')}
+          />
+        );
       case 'form':
         return (<AliasForm onFinish={() => this.navigateToSection('start')}/>);
       case 'game':
@@ -90,7 +111,7 @@ class App extends Component {
         <div className="three-container-style-wrapper"
               style={section === 'game' ? null : { filter: 'blur(5px) brightness(90%)' }}>
           <ThreeContainer manager={this.state.threeSceneManager}
-                          onSceneEnd={() => this.navigateToSection('end')}/>
+                          onSceneEnd={stats => this.navigateToSection('end', stats)}/>
         </div>
         {section !== 'game' && (
           <>
