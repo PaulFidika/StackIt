@@ -152,9 +152,10 @@ class GameScene {
           const nextDirection = this.bricks[height - 1].params.direction === 'x'
             ? 'z'
             : 'x';
+          // Position the new brick off-screen along its movement axis
           const nextPos = (nextDirection === 'x')
-            ? new THREE.Vector3(currPos.x, currPos.y + 8, -59)
-            : new THREE.Vector3(-59, currPos.y + 8, currPos.z);
+            ? new THREE.Vector3(-59, currPos.y + 8, currPos.z)
+            : new THREE.Vector3(currPos.x, currPos.y + 8, -59);
           // Advance hue
           this.hue = (this.hue + 20) % 360;
           const newBrick = new Brick({
@@ -180,18 +181,18 @@ class GameScene {
       }
     });
     // update ripple and fireworks
-    this.ripples.forEach((r, i) => {
-      r.update(deltaTime);
+    this.ripples.forEach((r, idx) => {
+      r.update(deltaTime, this.camera);
       if (r.isComplete) {
         this.scene.remove(r.mesh);
-        this.ripples.splice(i, 1);
+        this.ripples.splice(idx, 1);
       }
     });
-    this.fireworks.forEach((f, i) => {
+    this.fireworks.forEach((f, idx) => {
       f.update(deltaTime);
       if (f.isComplete) {
         this.scene.remove(f.group);
-        this.fireworks.splice(i, 1);
+        this.fireworks.splice(idx, 1);
       }
     });
     // render scene

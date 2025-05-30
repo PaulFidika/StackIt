@@ -21,11 +21,15 @@ class Ripple {
     this.mesh = new THREE.Mesh(geom, mat);
     this.mesh.rotation.x = -Math.PI / 2;
     this.mesh.position.copy(position);
+    this.mesh.position.y += 0.5;
     this.mesh.scale.setScalar(0.1);
   }
 
-  update(delta) {
+  update(delta, camera) {
     if (this.isComplete) return;
+    if (camera) {
+      this.mesh.lookAt(camera.position);
+    }
     this.elapsed += delta;
     const t = this.elapsed / this.params.duration;
     if (t >= 1) {

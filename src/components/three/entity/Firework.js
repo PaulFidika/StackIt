@@ -13,7 +13,7 @@ class Firework {
     this.velocities = [];
 
     for (let i = 0; i < particleCount; i += 1) {
-      const geom = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const geom = new THREE.BoxGeometry(2, 2, 2);
       const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1 });
       const cube = new THREE.Mesh(geom, mat);
       cube.position.copy(position);
@@ -23,7 +23,7 @@ class Firework {
         Math.random() * 0.8 + 0.2,
         (Math.random() - 0.5),
       ).normalize();
-      this.velocities.push(dir.multiplyScalar(15 + Math.random() * 10));
+      this.velocities.push(dir.multiplyScalar(8 + Math.random() * 6));
     }
   }
 
