@@ -22,6 +22,7 @@ const gameStateDefault = {
 const appStateDefault = {
   userRegistered: false,
   aliasRegistered: false,
+  firebaseAvailable: false,
   currentSection: {
     app: 'start',
     startMenu: 'main',

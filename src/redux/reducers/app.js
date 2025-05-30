@@ -3,6 +3,7 @@ import {
   REGISTER_USER,
   INVALIDATE_USER,
   SWITCH_SECTION,
+  SET_FIREBASE_AVAILABLE,
 } from '../constants/actionTypes';
 import { appStateDefault } from '../constants/defaultStates';
 
@@ -24,6 +25,8 @@ export default function appReducer(state = appStateDefault, action) {
           app: action.payload,
         }),
       };
+    case SET_FIREBASE_AVAILABLE:
+      return Object.assign({}, state, { firebaseAvailable: action.payload });
     default:
       return state;
   }

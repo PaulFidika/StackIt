@@ -1,5 +1,5 @@
 import {
-  REGISTER_USER, REGISTER_ALIAS, INVALIDATE_USER, SWITCH_SECTION,
+  REGISTER_USER, REGISTER_ALIAS, INVALIDATE_USER, SWITCH_SECTION, SET_FIREBASE_AVAILABLE,
 } from '../constants/actionTypes';
 
 function appRegisterUser() {
@@ -27,9 +27,17 @@ function appSwitchSection(sectionName) {
   };
 }
 
+function appSetFirebaseAvailable(isAvailable) {
+  return {
+    type: SET_FIREBASE_AVAILABLE,
+    payload: isAvailable,
+  };
+}
+
 export {
   appRegisterUser,
   appRegisterAlias,
   appInvalidateUser,
   appSwitchSection,
+  appSetFirebaseAvailable,
 };

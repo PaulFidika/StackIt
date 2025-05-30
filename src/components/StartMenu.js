@@ -33,10 +33,12 @@ class StartMenu extends Component {
             <ListLayout>
               <Button name="start" onClick={this.props.onGameStart}/>
               <Button name="tutorial" onClick={() => this.navigateToSection('tutorial')}/>
-              {this.props.userRegistered ? (
-                <FirebaseLogout />
-              ) : (
-                <Button name="login" onClick={() => this.navigateToSection('login')}/>
+              {this.props.firebaseAvailable && (
+                this.props.userRegistered ? (
+                  <FirebaseLogout />
+                ) : (
+                  <Button name="login" onClick={() => this.navigateToSection('login')}/>
+                )
               )}
             </ListLayout>
           </div>);
@@ -49,7 +51,7 @@ class StartMenu extends Component {
           </div>
         );
       case 'login':
-        return (
+        return this.props.firebaseAvailable ? (
           <div key='login-section' className='login-section'>
             <ListLayout>
               <Button name="👈" onClick={() => this.navigateToSection('main')}/>
@@ -57,7 +59,7 @@ class StartMenu extends Component {
               <FirebaseFacebookSignIn />
             </ListLayout>
           </div>
-        );
+        ) : null;
       default:
         return null;
     }
@@ -75,6 +77,7 @@ class StartMenu extends Component {
 StartMenu.propTypes = {
   userRegistered: PropTypes.bool,
   onGameStart: PropTypes.func,
+  firebaseAvailable: PropTypes.bool,
 };
 
 
@@ -82,6 +85,7 @@ function mapStateToProps(state) {
   const { appState } = state;
   return {
     userRegistered: appState.userRegistered,
+    firebaseAvailable: appState.firebaseAvailable,
   };
 }
 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-// import Physijs from 'physijs-webpack/webpack';
+import Physijs from 'physijs-webpack/webpack';
 import Brick from './entity/Brick';
 import Cornerstone from './entity/Cornerstone';
 import { PhysicSceneModule, RendererModule, CameraModule } from './module/SceneModules';
@@ -20,6 +20,12 @@ class GameScene {
     this.name = this.scene.uuid;
     // utilities
     this.handleWindowResize = this.handleWindowResize.bind(this);
+    // Store the initial block size to limit expansion
+    this.initialBlockScale = new THREE.Vector3(1, 1, 1);
+    this.maxBlockScale = new THREE.Vector3(1, 1, 1); // Don't exceed starting size
+    // Color management
+    this.currentHue = Math.random() * 360; // Random starting hue
+    this.hueIncrement = 15; // Degrees to move on color wheel per block
   }
 
   init() {
@@ -53,10 +59,12 @@ class GameScene {
     const baseBrick = new Brick({
       position: new THREE.Vector3(0, -4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: this.getNextColor(),
     });
     const currBrick = new Brick({
       position: new THREE.Vector3(0, 4, 0),
       scale: new THREE.Vector3(1, 1, 1),
+      color: this.getNextColor(),
     });
     this.bricks.push(baseBrick);
     this.bricks.push(currBrick);
@@ -100,6 +108,10 @@ class GameScene {
           }
           if (res.case === 'overlap') {
             this.state.combo += 1;
+            // Expand block size when combo reaches 3 or more
+            if (this.state.combo >= 3) {
+              this.expandCurrentBlock();
+            }
           }
           this.state.score += 1;
           // create new brick
@@ -108,8 +120,9 @@ class GameScene {
             position: this.bricks[height - 1].params.direction === 'x'
               ? new THREE.Vector3(currPos.x, currPos.y + 8, -59)
               : new THREE.Vector3(-59, currPos.y + 8, currPos.z),
-            scale: this.bricks[height - 1].mesh.scale,
+            scale: this.bricks[height - 1].mesh.scale.clone(),
             direction: this.bricks[height - 1].params.direction === 'x' ? 'z' : 'x',
+            color: this.getNextColor(),
           });
           this.bricks.push(newBrick);
           this.scene.add(this.bricks[height].mesh);
@@ -119,7 +132,7 @@ class GameScene {
     }
     // remove some falling bricks to boost performace
     this.fallingBricks.forEach((brick, index) => {
-      if (brick && brick.mesh.position.y < this.camera.position.y - 150) {
+      if (brick && brick.mesh.position.y < this.camera.position.y - 400) {
         this.scene.remove(brick.mesh);
         brick.mesh.geometry.dispose();
         this.fallingBricks.splice(index, 1);
@@ -146,6 +159,60 @@ class GameScene {
   handleMouseClick() {
     console.log('GameScene.js handleMouseClick(): triggered!');
     this.state.toDrop = true;
+  }
+
+  expandCurrentBlock() {
+    const currentBrick = this.bricks[this.bricks.length - 1];
+    const currentScale = currentBrick.mesh.scale;
+    
+    // Expand by 5% per combo level, but don't exceed initial size
+    const expansionFactor = 1.05;
+    const newScaleX = Math.min(currentScale.x * expansionFactor, this.maxBlockScale.x);
+    const newScaleZ = Math.min(currentScale.z * expansionFactor, this.maxBlockScale.z);
+    
+    currentBrick.mesh.scale.set(newScaleX, currentScale.y, newScaleZ);
+    currentBrick.mesh.__dirtyPosition = true;
+  }
+
+  // Generate pastel color from HSL
+  static generatePastelColor(hue) {
+    const saturation = 0.3; // Low saturation for matte look
+    const lightness = 0.75; // High lightness for pastel look
+
+    // Convert HSL to RGB
+    const c = (1 - Math.abs(2 * lightness - 1)) * saturation;
+    const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+    const m = lightness - c / 2;
+
+    let r;
+    let g;
+    let b;
+
+    if (0 <= hue && hue < 60) {
+      r = c; g = x; b = 0;
+    } else if (60 <= hue && hue < 120) {
+      r = x; g = c; b = 0;
+    } else if (120 <= hue && hue < 180) {
+      r = 0; g = c; b = x;
+    } else if (180 <= hue && hue < 240) {
+      r = 0; g = x; b = c;
+    } else if (240 <= hue && hue < 300) {
+      r = x; g = 0; b = c;
+    } else if (300 <= hue && hue < 360) {
+      r = c; g = 0; b = x;
+    }
+
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+
+    return (r << 16) | (g << 8) | b;
+  }
+
+  getNextColor() {
+    const color = GameScene.generatePastelColor(this.currentHue);
+    this.currentHue = (this.currentHue + this.hueIncrement) % 360;
+    return color;
   }
 }
 

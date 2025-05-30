@@ -10,3 +10,36 @@
 	animation-duration: 0.4s;
 	animation-timing-function: ease-in-out;
 }
+
+/* Game results styling */
+.game-results {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.high-score-section {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.high-score-display {
+	font-size: 1.4rem;
+	color: #ccc;
+	letter-spacing: 1px;
+}
+
+.new-high-score {
+	font-size: 1.6rem;
+	font-weight: bold;
+	color: #FFD700;
+	text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0% { opacity: 1; transform: scale(1); }
+	50% { opacity: 0.8; transform: scale(1.05); }
+	100% { opacity: 1; transform: scale(1); }
+}

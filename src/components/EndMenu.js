@@ -1,48 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
-import { ScoreBoard, LeaderBoard } from './LeaderBoard';
+import { ScoreBoard } from './LeaderBoard';
 import '../css/endmenu.css';
 import ShowcaseLayout from './layout/ShowcaseLayout';
 
 
 class EndMenu extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentSection: 'score',
-      leaderboardData: [{ id: '1', name: 'yifu', score: '122' },
-        { id: '2', name: 'kacey', score: '34' },
-        { id: '3', name: 'david', score: '31' },
-        { id: '4', name: 'david', score: '26' },
-        { id: '5', name: 'david', score: '12' }],
-      score: 76,
-      combo: 7,
-    };
-  }
-
-  navigateToSection(section) {
-    this.setState({
-      currentSection: section,
-    });
-  }
-
   render() {
-    const section = this.state.currentSection;
+    // Use props if provided, otherwise fallback to default values
+    const score = this.props.score || '0';
+    const combo = this.props.combo || '0';
+    const highScore = this.props.highScore || '0';
+    const isNewHighScore = this.props.isNewHighScore || false;
+
     return (
       <div className='end-menu'>
         <ShowcaseLayout showcase={
-          (section === 'score')
-            ? (<ScoreBoard
-                score={this.state.score.toString()}
-                combo={this.state.combo.toString()}
-              />)
-            : (<LeaderBoard data={this.state.leaderboardData} />)
+          <div className="game-results">
+            <ScoreBoard
+              score={score}
+              combo={combo}
+            />
+            <div className="high-score-section">
+              {isNewHighScore ? (
+                <div className="new-high-score">
+                  🎉 NEW HIGH SCORE! 🎉
+                </div>
+              ) : (
+                <div className="high-score-display">
+                  High Score: {highScore}
+                </div>
+              )}
+            </div>
+          </div>
         }>
           <Button name="👈" onClick={this.props.onBackButtonClick}/>
-          {(section === 'score')
-            ? (<Button name="leaderboard" onClick={() => this.navigateToSection('leader')}/>)
-            : (<Button name="scoreboard" onClick={() => this.navigateToSection('score')}/>)}
         </ShowcaseLayout>
       </div>
     );
@@ -52,7 +45,8 @@ class EndMenu extends Component {
 EndMenu.propTypes = {
   score: PropTypes.string,
   combo: PropTypes.string,
-  leaderboardData: PropTypes.array,
+  highScore: PropTypes.string,
+  isNewHighScore: PropTypes.bool,
   onBackButtonClick: PropTypes.func,
 };
 

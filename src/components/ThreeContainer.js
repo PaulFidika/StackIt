@@ -9,6 +9,7 @@ class ThreeContainer extends Component {
     this.isSceneEndHandled = false;
     this.animate = this.animate.bind(this);
     this.handleMouseClick = this.handleMouseClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -16,6 +17,7 @@ class ThreeContainer extends Component {
       const mountPoint = this.mountPoint;
       mountPoint.appendChild(this.manager.renderer.domElement);
       window.addEventListener('resize', this.manager.handleWindowResize, false);
+      window.addEventListener('keydown', this.handleKeyPress, false);
       this.animate();
     }
   }
@@ -51,6 +53,7 @@ class ThreeContainer extends Component {
       this.manager = manager;
       mountPoint.appendChild(renderer.domElement);
       window.addEventListener('resize', this.manager.handleWindowResize, false);
+      window.addEventListener('keydown', this.handleKeyPress, false);
       this.animate();
     }
   }
@@ -62,6 +65,8 @@ class ThreeContainer extends Component {
     if (this.manager !== null) {
       this.mountPoint.removeChild(this.manager.renderer.domElement);
     }
+    window.removeEventListener('resize', this.manager.handleWindowResize);
+    window.removeEventListener('keydown', this.handleKeyPress);
   }
 
   animate() {
@@ -83,11 +88,23 @@ class ThreeContainer extends Component {
     this.manager.handleMouseClick();
   }
 
+  handleKeyPress(event) {
+    // Handle spacebar (keyCode 32 or key ' ')
+    if (event.code === 'Space' || event.key === ' ') {
+      event.preventDefault(); // Prevent page scrolling
+      this.handleMouseClick(); // Treat spacebar like a click
+    }
+  }
+
   render() {
     return (
       <div className="three-container"
         ref={(el) => { this.mountPoint = el; }}
-        onClick={this.handleMouseClick}>
+        onClick={this.handleMouseClick}
+        onKeyDown={this.handleKeyPress}
+        tabIndex={0}
+        role="button"
+        aria-label="Click or press space to drop block">
       </div>
     );
   }
