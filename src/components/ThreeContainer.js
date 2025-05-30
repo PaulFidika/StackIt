@@ -18,6 +18,7 @@ class ThreeContainer extends Component {
       const mountPoint = this.mountPoint;
       mountPoint.appendChild(this.manager.renderer.domElement);
       window.addEventListener('resize', this.manager.handleWindowResize, false);
+      window.addEventListener('keydown', this.handleKeyDown, false);
       this.animate();
     }
   }
@@ -64,6 +65,7 @@ class ThreeContainer extends Component {
     if (this.manager !== null) {
       this.mountPoint.removeChild(this.manager.renderer.domElement);
     }
+    window.removeEventListener('keydown', this.handleKeyDown, false);
   }
 
   animate() {

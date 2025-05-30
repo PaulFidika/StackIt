@@ -52,9 +52,9 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 
 ### Gameplay
 
-- [ ] Capture the space-button from the keyboard and register it the same as a 'click' or a 'tap' in the game.
-- [ ] Begin keeping track of a 'perfect stack' internally; we will call this the combo meter. A perfect stack is when blocks are placed with no loss on top of each other.
-- [ ] When the player has 3 or more perfect stacks in a row (combo of 3) expand the size of the block that was just placed. The next block to be placed will match its new, larger size. The core mechanic of the game is that as players miss, pieces of the block are shaved off, until there are no pieces left, but this mechanic allows pieces to be expanded upon. The size of the block cannot be expanded to be larger than the starting size of the block (with 0 stacks).
+- [x] Capture the space-button from the keyboard and register it the same as a 'click' or a 'tap' in the game.
+- [x] Begin keeping track of a 'perfect stack' internally; we will call this the combo meter. A perfect stack is when blocks are placed with no loss on top of each other.
+- [x] When the player has 3 or more perfect stacks in a row (combo of 3) expand the size of the block that was just placed. The next block to be placed will match its new, larger size. The core mechanic of the game is that as players miss, pieces of the block are shaved off, until there are no pieces left, but this mechanic allows pieces to be expanded upon. The size of the block cannot be expanded to be larger than the starting size of the block (with 0 stacks).
 
 ### Cosmetic 
 
