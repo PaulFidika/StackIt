@@ -45,10 +45,10 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 
 ### Scoring System
 
-- [ ] Currently in EndMenu.js the score is fixed, and the leaderboard is faked. Instead, implement a real scoring system. There is no Notion of 'max combo' that we will measure. Instead we will score 1 point per block stacked. We will keep a running total internally.
-- [ ] While blocks are being stacked, display a 'current score' in the upper-center part of the screen.
-- [ ] After every game, store the player's highest score in local storage
-- [ ] After the game finishes, display the score the player got versus their highest score.
+- [x] Currently in EndMenu.js the score is fixed, and the leaderboard is faked. Instead, implement a real scoring system. There is no Notion of 'max combo' that we will measure. Instead we will score 1 point per block stacked. We will keep a running total internally.
+- [x] While blocks are being stacked, display a 'current score' in the upper-center part of the screen.
+- [x] After every game, store the player's highest score in local storage
+- [x] After the game finishes, display the score the player got versus their highest score.
 
 ### Gameplay
 

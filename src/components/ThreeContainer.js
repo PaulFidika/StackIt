@@ -9,6 +9,8 @@ class ThreeContainer extends Component {
     this.isSceneEndHandled = false;
     this.animate = this.animate.bind(this);
     this.handleMouseClick = this.handleMouseClick.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.updateScoreDisplay = this.updateScoreDisplay.bind(this);
   }
 
   componentDidMount() {
@@ -68,13 +70,27 @@ class ThreeContainer extends Component {
     if (this.isSceneEndHandled) {
       this.frameId = requestAnimationFrame(this.animate);
       this.manager.update();
+      this.updateScoreDisplay();
     } else {
       this.frameId = requestAnimationFrame(this.animate);
       this.manager.update();
+      this.updateScoreDisplay();
       if (this.manager.state.isTerminated) {
         this.props.onSceneEnd(this.manager.state);
         this.isSceneEndHandled = true;
       }
+    }
+  }
+
+  updateScoreDisplay() {
+    if (this.scoreDisplay) {
+      this.scoreDisplay.textContent = this.manager.state.score;
+    }
+  }
+
+  handleKeyDown(event) {
+    if (event.key === ' ' || event.key === 'Enter') {
+      this.handleMouseClick();
     }
   }
 
@@ -84,10 +100,19 @@ class ThreeContainer extends Component {
 
   render() {
     return (
-      <div className="three-container"
+      <button
+        className="three-container"
         ref={(el) => { this.mountPoint = el; }}
-        onClick={this.handleMouseClick}>
-      </div>
+        onClick={this.handleMouseClick}
+        onKeyDown={this.handleKeyDown}
+        type="button"
+        aria-label="Game canvas - click or press space to drop block"
+      >
+        <div
+          className="three-container-score"
+          ref={(el) => { this.scoreDisplay = el; }}
+        />
+      </button>
     );
   }
 }

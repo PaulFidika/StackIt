@@ -8,4 +8,17 @@
 	width: 100vw;
 	object-fit: cover;
 	background: linear-gradient(to bottom, #894da5 0%,#41347a 20%,#162d47 43%);
+	border: none;
+	padding: 0;
+	outline: none;
+}
+
+.three-container-score {
+	position: absolute;
+	top: 24px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 3rem;
+	font-weight: bold;
+	pointer-events: none;
 }
