@@ -65,3 +65,17 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 - [ ] After a piece of a block is 'shaved off', allow it to fall and tumble much longer before being disappearing
 - [ ] Run the game entirely in-browser; do not depend upon there being any sort of server to do the physics and falling calculations for a block falling. Currently if you do not have a server running, the game will still play in browser, but for some reason the blocks will not fall.
 
+----
+
+### Score:
+
+UI: 1 / 2
+Scoring System: 3 / 4
+Gameplay: 2 / 3
+Cosmetic: 3 / 6
+
+Negatives:
+- Game crashes when the blocks should expand (-1)
+- Clicking the mouse no longer works (-1)
+
+Overall Score: 7
