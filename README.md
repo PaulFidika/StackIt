@@ -41,7 +41,7 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 ### UI
 
 - [x] Hide the leaderboard since it's not actually being used
-- [x] HIde the login button and options, unless Firebase is actually being used for an actual login system. If proper firebase envs are not supplied, or the supplied values fail to work, assume that it firebase (and hence login) should be disabled.
+- [x] Hide the login button and options, unless Firebase is actually being used for an actual login system. If proper firebase envs are not supplied, or the supplied values fail to work, assume that it firebase (and hence login) should be disabled.
 
 ### Scoring System
 
@@ -65,3 +65,14 @@ Firebase offers clean and simple APIs to persist data, and deploy web apps. And 
 - [x] After a piece of a block is 'shaved off', allow it to fall and tumble much longer before being disappearing
 - [ ] Run the game entirely in-browser; do not depend upon there being any sort of server to do the physics and falling calculations for a block falling. Currently if you do not have a server running, the game will still play in browser, but for some reason the blocks will not fall.
 
+### Score:
+
+UI: 2 / 2
+Scoring System: 2 / 4
+Gameplay: 3 / 3
+Cosmetic: 3 / 6
+
+Negatives:
+- Bug: mixing clicks with spacebar presses causes a misfire on the next block-loop (-1)
+
+Overall Score: 9
